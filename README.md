@@ -1,8 +1,8 @@
 # AnimateMath AI 🎬
 
-> Turn any math topic into a stunning animated video in seconds — powered by GPT-4o and Manim.
+> Turn any math topic into a stunning animated video in seconds — powered by GPT-5.6 and Manim.
 
-Built for the **OpenAI Hackathon 2026**.
+Built for the **OpenAI Build Week Hackathon 2026**.
 
 ---
 
@@ -19,10 +19,10 @@ Type any math topic in any language → get a fully animated MP4 video with:
 ## How it works
 
 ```
-User types topic → GPT-4o generates Manim Python code → Manim renders MP4 → returned in ~20s
+User types topic → GPT-5.6 Sol generates Manim Python code → Manim renders MP4 → returned in ~20s
 ```
 
-No templates. GPT-4o freely decides the best visualization for every concept.
+No templates. GPT-5.6 freely decides the best visualization for every concept.
 
 ## How OpenAI tools were used
 
