@@ -1,0 +1,8 @@
+node_modules/
+renders/
+media/
+tmp/
+.env
+*.mp4
+*.log
+public/renders/
