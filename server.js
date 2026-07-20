@@ -591,7 +591,6 @@ RETURN: complete Python file including the header provided. No markdown fences, 
       { role: 'system', content: systemPrompt },
       { role: 'user', content: `Math topic: "${prompt}"${summaryNote}\n\nComplete this file (fill in the construct body):\n${header}\n        # complete here` }
     ],
-    temperature: 0.25,
     max_completion_tokens: 2500,
   });
 
@@ -677,7 +676,6 @@ Detect the language of the prompt. Return ONLY valid JSON (no explanation):
   "solution_word": "word for Solution IN DETECTED LANGUAGE"
 }`
     }],
-    temperature: 0.3,
     max_completion_tokens: 550,
   });
 
@@ -875,7 +873,6 @@ Detect the language of the prompt. Return ONLY valid JSON (no explanation):
   "solution_word": "word for Solution IN DETECTED LANGUAGE"
 }`
     }],
-    temperature: 0.3,
     max_completion_tokens: 600,
   });
 
@@ -1081,7 +1078,6 @@ Detect the language of the prompt. Return ONLY valid JSON (no explanation):
   "solution_word": "word for Solution IN DETECTED LANGUAGE"
 }`
     }],
-    temperature: 0.3,
     max_completion_tokens: 600,
   });
 
@@ -1275,7 +1271,6 @@ app.post('/api/generate', async (req, res) => {
           { role: 'system', content: 'You are a math teacher. Write a SHORT answer/solution (2-4 lines) with key formulas using LaTeX ($...$ inline, $$...$$ display). Write in the SAME language as the question. Be concise — key result + formula only.' },
           { role: 'user', content: prompt }
         ],
-        temperature: 0.2,
         max_completion_tokens: 200,
       });
       summary = sumResp.choices[0].message.content.trim();
@@ -1348,7 +1343,6 @@ Use font_size=30 for text, font_size=36 for formulas. Fade everything out at the
         const fix = await openai.chat.completions.create({
           model: 'gpt-5.6-sol',
           messages: fixMessages,
-          temperature: 0.3,
         });
         fixedCode = fix.choices[0].message.content.trim()
           .replace(/^```python\n?/, '').replace(/\n?```$/, '').trim();
@@ -1380,7 +1374,6 @@ Use font_size=30 for text, font_size=36 for formulas. Fade everything out at the
           const fix3 = await openai.chat.completions.create({
             model: 'gpt-5.6-sol',
             messages: fix3Messages,
-            temperature: 0.2,
           });
           code3 = fix3.choices[0].message.content.trim()
             .replace(/^```python\n?/, '').replace(/\n?```$/, '').trim();
