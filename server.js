@@ -592,6 +592,7 @@ RETURN: complete Python file including the header provided. No markdown fences, 
       { role: 'user', content: `Math topic: "${prompt}"${summaryNote}\n\nComplete this file (fill in the construct body):\n${header}\n        # complete here` }
     ],
     max_tokens: 2500,
+    temperature: 0.25,
   });
 
   let code = resp.choices[0].message.content.trim()
@@ -677,6 +678,7 @@ Detect the language of the prompt. Return ONLY valid JSON (no explanation):
 }`
     }],
     max_tokens: 550,
+    temperature: 0.3,
   });
 
   let c;
@@ -874,6 +876,7 @@ Detect the language of the prompt. Return ONLY valid JSON (no explanation):
 }`
     }],
     max_tokens: 600,
+    temperature: 0.3,
   });
 
   let c;
@@ -1079,6 +1082,7 @@ Detect the language of the prompt. Return ONLY valid JSON (no explanation):
 }`
     }],
     max_tokens: 600,
+    temperature: 0.3,
   });
 
   let c;
