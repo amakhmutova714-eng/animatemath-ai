@@ -1431,5 +1431,5 @@ Use font_size=30 for text, font_size=36 for formulas. Fade everything out at the
   }
 });
 
-const PORT = 3030;
+const PORT = process.env.PORT || 3030;
 app.listen(PORT, () => console.log(`AnimateMath AI → http://localhost:${PORT}`));
