@@ -24,9 +24,14 @@ User types topic → GPT-4o generates Manim Python code → Manim renders MP4 �
 
 No templates. GPT-4o freely decides the best visualization for every concept.
 
+## How OpenAI tools were used
+
+- **OpenAI API (GPT-5.6)** — generates complete Manim Python animation code for any math concept. The model decides the best visualization (triangle, circle, sine wave, matrix...), writes all animation logic, and produces step-by-step explanation cards.
+- **OpenAI Codex** — used during development to write and debug the Node.js backend, the Manim code injection pipeline, and the post-processing auto-fix logic.
+
 ## Tech stack
 
-- **AI:** OpenAI GPT-4o
+- **AI:** OpenAI API (GPT-5.6) + Codex
 - **Animation:** Manim Community Edition v0.19.2
 - **Backend:** Node.js + Express
 - **Frontend:** Vanilla HTML / CSS / JS
