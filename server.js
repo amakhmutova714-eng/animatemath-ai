@@ -586,7 +586,7 @@ LANGUAGE: Detect language of the prompt. ALL Text() and Tex() strings → same l
 RETURN: complete Python file including the header provided. No markdown fences, raw Python only.`;
 
   const resp = await openai.chat.completions.create({
-    model: 'gpt-5.6-terra',
+    model: 'gpt-4o',
     messages: [
       { role: 'system', content: systemPrompt },
       { role: 'user', content: `Math topic: "${prompt}"${summaryNote}\n\nComplete this file (fill in the construct body):\n${header}\n        # complete here` }
@@ -651,7 +651,7 @@ RETURN: complete Python file including the header provided. No markdown fences, 
 
 async function buildVerticalCode(prompt, fmt, summary, explainInside) {
   const contentResp = await openai.chat.completions.create({
-    model: 'gpt-5.6-terra',
+    model: 'gpt-4o',
     response_format: { type: 'json_object' },
     messages: [{
       role: 'user',
@@ -847,7 +847,7 @@ ${insideSummarySlide}
 
 async function buildHorizontalCode(prompt, fmt, summary, explainInside) {
   const contentResp = await openai.chat.completions.create({
-    model: 'gpt-5.6-terra',
+    model: 'gpt-4o',
     response_format: { type: 'json_object' },
     messages: [{
       role: 'user',
@@ -1052,7 +1052,7 @@ ${insideSummarySlide}
 
 async function buildSquareCode(prompt, fmt, summary, explainInside) {
   const contentResp = await openai.chat.completions.create({
-    model: 'gpt-5.6-terra',
+    model: 'gpt-4o',
     response_format: { type: 'json_object' },
     messages: [{
       role: 'user',
@@ -1266,7 +1266,7 @@ app.post('/api/generate', async (req, res) => {
     let summary = '';
     try {
       const sumResp = await openai.chat.completions.create({
-        model: 'gpt-5.6-terra',
+        model: 'gpt-4o',
         messages: [
           { role: 'system', content: 'You are a math teacher. Write a SHORT answer/solution (2-4 lines) with key formulas using LaTeX ($...$ inline, $$...$$ display). Write in the SAME language as the question. Be concise — key result + formula only.' },
           { role: 'user', content: prompt }
@@ -1341,7 +1341,7 @@ Use font_size=30 for text, font_size=36 for formulas. Fade everything out at the
           { role: 'user', content: `Fix this error:\n${errorLine}\n\nCode:\n${code}\n\nReturn ONLY corrected Python.` }
         ];
         const fix = await openai.chat.completions.create({
-          model: 'gpt-5.6-terra',
+          model: 'gpt-4o',
           messages: fixMessages,
         });
         fixedCode = fix.choices[0].message.content.trim()
@@ -1372,7 +1372,7 @@ Use font_size=30 for text, font_size=36 for formulas. Fade everything out at the
             { role: 'user', content: `Still failing: ${err2Line}\n\nFix this Manim code:\n${fixedCode}\n\nReturn ONLY corrected Python.` }
           ];
           const fix3 = await openai.chat.completions.create({
-            model: 'gpt-5.6-terra',
+            model: 'gpt-4o',
             messages: fix3Messages,
           });
           code3 = fix3.choices[0].message.content.trim()
