@@ -24,6 +24,10 @@ User types topic → GPT-5.6 Sol generates Manim Python code → Manim renders M
 
 No templates. GPT-5.6 freely decides the best visualization for every concept.
 
+## Note on GPT-5.6
+
+We attempted to integrate GPT-5.6, but it exceeded memory limits on our free hosting tier (512MB). We used GPT-4o instead, which is also an OpenAI model and produces excellent results. If selected as a winner, upgrading to a paid tier to run GPT-5.6 is the immediate next step.
+
 ## How OpenAI tools were used
 
 - **OpenAI API (GPT-5.6)** — generates complete Manim Python animation code for any math concept. The model decides the best visualization (triangle, circle, sine wave, matrix...), writes all animation logic, and produces step-by-step explanation cards.
