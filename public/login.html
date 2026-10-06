@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GoTAB — Кіру</title>
+<link rel="stylesheet" href="gotab.css">
+</head>
+<body>
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <a href="index.html"><img src="gotab_logo.png" alt="GoTAB"></a>
+    </div>
+    <h1 class="auth-title">Жүйеге кіру</h1>
+    <p class="auth-sub">GoTAB мұғалімдер платформасына қош келдіңіз</p>
+
+    <div class="error-msg" id="errMsg"></div>
+
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label>Email немесе телефон нөмірі</label>
+        <input type="text" id="emailInput" placeholder="example@mail.com немесе +7..." autocomplete="username" required>
+      </div>
+      <div class="form-group">
+        <label>Пароль</label>
+        <input type="password" id="passInput" placeholder="••••••••" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn-primary" id="loginBtn">Кіру</button>
+    </form>
+
+    <div class="auth-switch">
+      Аккаунт жоқ па? <a href="register.html">Тіркелу</a>
+    </div>
+  </div>
+</div>
+
+<script>
+async function handleLogin(e) {
+  e.preventDefault();
+  const btn = document.getElementById('loginBtn');
+  const errMsg = document.getElementById('errMsg');
+  const email = document.getElementById('emailInput').value.trim();
+  const password = document.getElementById('passInput').value;
+
+  errMsg.style.display = 'none';
+  btn.textContent = 'Кіру...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+
+    if (data.ok) {
+      localStorage.setItem('gotab_user', JSON.stringify(data.user));
+      window.location.href = 'dashboard.html';
+    } else {
+      errMsg.textContent = data.error || 'Кіру мүмкін болмады';
+      errMsg.style.display = 'block';
+      btn.textContent = 'Кіру';
+      btn.disabled = false;
+    }
+  } catch {
+    errMsg.textContent = 'Қосылу қатесі. Қайталап көріңіз.';
+    errMsg.style.display = 'block';
+    btn.textContent = 'Кіру';
+    btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>

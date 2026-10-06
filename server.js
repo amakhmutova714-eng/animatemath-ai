@@ -16,7 +16,38 @@ app.use('/renders', express.static(path.join(__dirname, 'renders')));
 
 const TMP_DIR     = path.join(__dirname, 'tmp');
 const RENDERS_DIR = path.join(__dirname, 'renders');
-[TMP_DIR, RENDERS_DIR].forEach(d => { if (!fs.existsSync(d)) fs.mkdirSync(d); });
+const DATA_DIR    = path.join(__dirname, 'data');
+const USERS_FILE  = path.join(DATA_DIR, 'users.json');
+[TMP_DIR, RENDERS_DIR, DATA_DIR].forEach(d => { if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true }); });
+
+function loadUsers() {
+  if (fs.existsSync(USERS_FILE)) return JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
+  return {};
+}
+function saveUsers(users) {
+  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+}
+
+app.post('/api/register', (req, res) => {
+  const { name, email, phone, password } = req.body;
+  if (!name || !email || !password) return res.json({ ok: false, error: 'Барлық міндетті өрістерді толтырыңыз' });
+  const users = loadUsers();
+  const key = email.toLowerCase().trim();
+  if (users[key]) return res.json({ ok: false, error: 'Бұл email тіркелген' });
+  users[key] = { name, email: key, phone: phone || '', password, createdAt: Date.now() };
+  saveUsers(users);
+  res.json({ ok: true, user: { name, email: key } });
+});
+
+app.post('/api/login', (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) return res.json({ ok: false, error: 'Барлық өрістерді толтырыңыз' });
+  const users = loadUsers();
+  const key = email.toLowerCase().trim();
+  const user = users[key];
+  if (!user || user.password !== password) return res.json({ ok: false, error: 'Email немесе пароль қате' });
+  res.json({ ok: true, user: { name: user.name, email: user.email } });
+});
 
 const SYSTEM_PROMPT = `You are an elite Manim CE v0.19.2 animator. You produce PREMIUM, CINEMATIC math videos — dark backgrounds, vibrant multi-color graphics, smooth camera moves, glow effects. Every video must look like it belongs on a high-end math SaaS platform.
 
