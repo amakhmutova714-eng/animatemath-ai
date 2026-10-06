@@ -17,14 +17,14 @@
 
     <div class="error-msg" id="errMsg"></div>
 
-    <form id="regForm" onsubmit="handleRegister(event)">
+    <form onsubmit="handleRegister(event)">
       <div class="form-group">
         <label>Аты-жөні</label>
         <input type="text" id="nameInput" placeholder="Мысалы: Айгүл Ахметова" required>
       </div>
       <div class="form-group">
         <label>Email</label>
-        <input type="email" id="emailInput" placeholder="example@mail.com" autocomplete="email" required>
+        <input type="email" id="emailInput" placeholder="example@mail.com" required>
       </div>
       <div class="form-group">
         <label>Телефон нөмірі</label>
@@ -32,13 +32,13 @@
       </div>
       <div class="form-group">
         <label>Пароль</label>
-        <input type="password" id="passInput" placeholder="Кемінде 6 таңба" autocomplete="new-password" required minlength="6">
+        <input type="password" id="passInput" placeholder="Кемінде 6 таңба" required minlength="6">
       </div>
       <div class="form-group">
         <label>Парольді растаңыз</label>
         <input type="password" id="pass2Input" placeholder="Парольді қайталаңыз" required>
       </div>
-      <button type="submit" class="btn-primary" id="regBtn">Тіркелу</button>
+      <button type="submit" class="btn-primary">Тіркелу</button>
     </form>
 
     <div class="auth-switch">
@@ -48,12 +48,11 @@
 </div>
 
 <script>
-async function handleRegister(e) {
+function handleRegister(e) {
   e.preventDefault();
-  const btn = document.getElementById('regBtn');
   const errMsg = document.getElementById('errMsg');
   const name = document.getElementById('nameInput').value.trim();
-  const email = document.getElementById('emailInput').value.trim();
+  const email = document.getElementById('emailInput').value.trim().toLowerCase();
   const phone = document.getElementById('phoneInput').value.trim();
   const password = document.getElementById('passInput').value;
   const pass2 = document.getElementById('pass2Input').value;
@@ -66,32 +65,18 @@ async function handleRegister(e) {
     return;
   }
 
-  btn.textContent = 'Тіркелу...';
-  btn.disabled = true;
+  const users = JSON.parse(localStorage.getItem('gotab_users') || '{}');
 
-  try {
-    const res = await fetch('/api/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, phone, password })
-    });
-    const data = await res.json();
-
-    if (data.ok) {
-      localStorage.setItem('gotab_user', JSON.stringify(data.user));
-      window.location.href = 'dashboard.html';
-    } else {
-      errMsg.textContent = data.error || 'Тіркелу мүмкін болмады';
-      errMsg.style.display = 'block';
-      btn.textContent = 'Тіркелу';
-      btn.disabled = false;
-    }
-  } catch {
-    errMsg.textContent = 'Қосылу қатесі. Қайталап көріңіз.';
+  if (users[email]) {
+    errMsg.textContent = 'Бұл email тіркелген';
     errMsg.style.display = 'block';
-    btn.textContent = 'Тіркелу';
-    btn.disabled = false;
+    return;
   }
+
+  users[email] = { name, email, phone, password };
+  localStorage.setItem('gotab_users', JSON.stringify(users));
+  localStorage.setItem('gotab_user', JSON.stringify({ name, email }));
+  window.location.href = 'dashboard.html';
 }
 </script>
 </body>
