@@ -10,6 +10,7 @@
 <nav class="top-nav">
   <img src="gotab_logo.png" alt="GoTAB">
   <div class="nav-user">
+    <a href="visuals.html" style="padding:7px 16px;background:rgba(26,86,219,.08);border:1px solid rgba(26,86,219,.2);border-radius:8px;color:var(--primary);font-size:13px;font-weight:700;text-decoration:none;transition:all .2s" onmouseover="this.style.background='rgba(26,86,219,.15)'" onmouseout="this.style.background='rgba(26,86,219,.08)'">Көрнекіліктер</a>
     <span class="nav-user-name" id="userName"></span>
     <button class="btn-logout" onclick="logout()">Шығу</button>
   </div>
@@ -17,12 +18,10 @@
 
 <div class="dash-page">
   <div class="dash-header">
-    <img src="gotab_logo.png" alt="GoTAB">
     <h1>GoTAB мұғалімдерге</h1>
     <p>Сынып пен пәнді таңдап, материалдарға кіріңіз</p>
   </div>
 
-  <!-- Grade selection -->
   <div class="dash-section">
     <div class="dash-section-title">Сынып таңдаңыз</div>
     <div class="grade-grid">
@@ -36,68 +35,57 @@
     </div>
   </div>
 
-  <!-- Subject selection (shown after grade pick) -->
   <div class="dash-section subject-section" id="subjectSection">
     <div class="dash-section-title">Пән таңдаңыз</div>
-
-    <!-- Grades 5-6: only Математика -->
     <div class="subject-grid" id="subjectsMath56" style="display:none">
       <button class="subject-btn" onclick="selectSubject('math')">Математика</button>
     </div>
-
-    <!-- Grades 7-11: Алгебра + Геометрия -->
     <div class="subject-grid" id="subjectsAlgGeo" style="display:none">
       <button class="subject-btn" onclick="selectSubject('algebra')">Алгебра</button>
       <button class="subject-btn" onclick="selectSubject('geometry')">Геометрия</button>
     </div>
   </div>
 
-  <!-- Continue button -->
   <div class="dash-continue">
     <button id="continueBtn" onclick="goToContent()" disabled>Жалғастыру →</button>
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
 <script>
-let selectedGrade = null;
-let selectedSubject = null;
+let selectedGrade = null, selectedSubject = null;
 
-// Auth check
-const user = JSON.parse(localStorage.getItem('gotab_user') || 'null');
-if (!user) window.location.href = 'login.html';
-else document.getElementById('userName').textContent = user.name || user.email;
+(async () => {
+  const user = await requireAuth();
+  if (!user) return;
+  const name = user.user_metadata?.name || user.email;
+  document.getElementById('userName').textContent = name;
+  if (user.email === ADMIN_EMAIL) {
+    const adminBtn = document.createElement('a');
+    adminBtn.href = 'admin.html';
+    adminBtn.textContent = 'Админ';
+    adminBtn.style.cssText = 'padding:7px 16px;background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);border-radius:8px;color:#c4b5fd;font-size:13px;font-weight:700;text-decoration:none';
+    document.querySelector('.nav-user').prepend(adminBtn);
+  }
+})();
 
-function logout() {
-  localStorage.removeItem('gotab_user');
+async function logout() {
+  localStorage.removeItem('gotab_last_page');
+  await sb.auth.signOut();
   window.location.href = 'index.html';
 }
 
 function selectGrade(grade) {
-  selectedGrade = grade;
-  selectedSubject = null;
-
-  // Highlight selected grade button
+  selectedGrade = grade; selectedSubject = null;
   document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('active'));
   event.target.classList.add('active');
-
-  // Reset subject
   document.querySelectorAll('.subject-btn').forEach(b => b.classList.remove('active'));
-
-  // Show subject section
-  const subjectSection = document.getElementById('subjectSection');
-  subjectSection.classList.add('visible');
-
-  const math56 = document.getElementById('subjectsMath56');
-  const algGeo = document.getElementById('subjectsAlgGeo');
-
-  if (grade <= 6) {
-    math56.style.display = 'flex';
-    algGeo.style.display = 'none';
-  } else {
-    math56.style.display = 'none';
-    algGeo.style.display = 'flex';
-  }
-
+  document.getElementById('subjectSection').classList.add('visible');
+  const math56  = document.getElementById('subjectsMath56');
+  const algGeo  = document.getElementById('subjectsAlgGeo');
+  if (grade <= 6) { math56.style.display = 'flex'; algGeo.style.display = 'none'; }
+  else            { math56.style.display = 'none';  algGeo.style.display = 'flex'; }
   document.getElementById('continueBtn').disabled = true;
 }
 
@@ -113,5 +101,6 @@ function goToContent() {
   window.location.href = `content.html?grade=${selectedGrade}&subject=${selectedSubject}`;
 }
 </script>
+<script src="math-bg.js"></script>
 </body>
 </html>

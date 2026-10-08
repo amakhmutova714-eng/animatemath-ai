@@ -4,5 +4,14 @@ media/
 tmp/
 .env
 *.mp4
+*.MP4
+*.MOV
 *.log
 public/renders/
+.vercel
+.env*
+# Lesson videos — tracked explicitly
+!public/videos/5-synyp-EUOB-EKOE.mp4
+!public/videos/6-synyp-Sannyn-Moduli.mp4
+!public/videos/7-synyp-Kopmusheler.mp4
+!public/videos/8-synyp-Irracionaldyktan-Aryltu.mp4
